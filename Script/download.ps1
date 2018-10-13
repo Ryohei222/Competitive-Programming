@@ -27,6 +27,7 @@ function Get-MySubmissions {
     foreach($item in $res){
         if($item.result -eq "AC"){
             $path = $item.contest_id
+            $path = "../Source/${path}"
             $flag = Test-Path $path
             if(!$flag){
                 $hoge = mkdir $path
