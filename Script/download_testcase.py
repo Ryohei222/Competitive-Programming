@@ -12,6 +12,14 @@ session = requests.Session()
 is_logged_in = False
 
 def LoginSession(payload):
+    """
+    ログインしてセッション情報ををsessionに格納する
+
+    Parameters
+    ----------
+        payload : dict
+            ユーザー名とパスワード
+    """
     r = session.get('https://beta.atcoder.jp/login')
     soup = BeautifulSoup(r.text,"html.parser")
     csrf_token = soup.find(attrs = {'name' : 'csrf_token'}).get('value')
@@ -19,6 +27,16 @@ def LoginSession(payload):
     session.post('https://beta.atcoder.jp/login' , data = payload)
 
 def Login(username,password):
+    """
+    username, passwordを受け取ってLoginSession()を実行
+
+    Parameters
+    ----------
+        username : str
+            ユーザー名
+        password : str
+            パスワード
+    """
     payload = {
         'username' : username,
         'password' : password
@@ -26,6 +44,23 @@ def Login(username,password):
     LoginSession(payload)
     is_logged_in = True
 
+def DownLoadSamples(contest_id, problem_id):
+    """
+    指定された問題のテストケースをダウンロードします
+    Parameters
+    ----------
+        contest_id : str
+        problem_id : str
+    Returns
+    ----------
+        status : int
+            ページが見つかれば0、そうでなければ-1を返します
+    """
+
+    url = "https://beta.atcoder.jp/contests/%s/tasks/%s" % (contest_id, problem_id)
+    res = session.get(url)
+
+"""
 def Submit(contest_id,problem_id,source):
     submit_page = session.get('https://beta.atcoder.jp/contests/%s/submit' % contest_id)
     submit_data = {
@@ -37,12 +72,9 @@ def Submit(contest_id,problem_id,source):
     csrf_token = soup.find(attrs = {'name' : 'csrf_token'}).get('value')
     submit_data['csrf_token'] = csrf_token
     result = session.post('https://beta.atcoder.jp/contests/%s/submit' % contest_id ,data = submit_data)
-    return result.status_code == requests.codes.ok
+    #return result.status_code == requests.codes.ok
 
 def SubmitCode(contest_id,problem_id):
-    if not IsLoggedIn():
-        vimecho("AtCoderSubmitter is not logged in.")
-        return
     source = '\n'.join(vim.eval('getline(0,"$")'))
     if Submit(contest_id,problem_id,source) == 1:
         vimecho('Submit')
@@ -58,24 +90,10 @@ def ShowSubmissions(url,args):
         problem = tr.find("a" , href = re.compile('tasks')).text
         user = tr.find("a" , href = re.compile('users')).text
         vim.current.buffer.append('{0} = [{1} - {2}] @{3}'.format(problem , judge , score , user))
-
-
-def MySubmissions(contest_id):
-    if not IsLoggedIn():
-        vimecho("AtCoderSubmitter is not logged in.")
-        return
-    ShowSubmissions('https://beta.atcoder.jp/contests/%s/submissions/me' % contest_id,{})
-
-def EasySubmit():
-    responce = requests.get('http://localhost:8080/')
-
-    if responce.status_code != 200:
-        vimecho("Oops! You have to turn on your server first. Take a look at README to solve it")    
-    else:
-        responceList=responce.text.split(' ')
-        SubmitCode(responceList[0],responceList[1])
+"""
 
 if __name__ == "__main__":
     username = input("username: ")
     password = getpass("password: ")
     Login(username, password)
+    
