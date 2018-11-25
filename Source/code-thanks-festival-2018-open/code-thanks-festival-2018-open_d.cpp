@@ -14,6 +14,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <stdlib.h>
+
 using namespace std;
  
 typedef long long ll;
@@ -36,28 +37,20 @@ static const int MOD = 1000000007;
 
 //-----end of template-----//
 
-double absd(double a){
-    if(a < 0) return -1.0 * a;
-    else return a;
-}
-
 int main(){
-    int n;
-    cin >> n;
-    vector<int> a(n);
-    int sum = 0;
-    REP(i, n){
-        cin >> a[i];
-        sum += a[i]*1000;
-    }
-    int ave = sum / n;
-    int dif = 1000000000;
-    int ans = -1;
-    REP(i, n){
-        if(dif > abs(ave - a[i]*1000)){
-            ans = i;
-            dif = abs(ave - a[i]*1000);
+    string s;
+    cin >> s;
+    int cnt = 0;
+    char head;
+    REP(i, s.length()){
+        if(i == 0){
+            head = s[0];
+        }else{
+            if(s[i] <= head){
+                cnt++;
+                head = s[i];
+            }
         }
     }
-    cout << ans << endl;
+    cout << cnt + 1 << endl;
 }
