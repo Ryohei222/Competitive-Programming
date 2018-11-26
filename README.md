@@ -2,10 +2,14 @@
 
 [@6Lgug](https://twitter.com/6Lgug)の競プロ用リポジトリです
 
+## License
+
+MIT License
+
 ## Environment
 
-Windows10/Ubuntu16.04/17.04
-gcc-6.3.0 C++14
+Windows10/Ubuntu16.04/17.04<br>
+gcc-6.3.0 C++14<br>
 Python 3.6.0
 
 ## Source
