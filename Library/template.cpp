@@ -38,5 +38,6 @@ static const int MOD = 1000000007;
 //-----end of template-----//
 
 int main(){
-    
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
 }
