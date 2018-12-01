@@ -50,24 +50,28 @@ int main(){
     REP(i, n) cin >> a[i] >> d[i];
     REP(i, q) cin >> x[i];
 
-    vector<ll> coltime(n), colpos(n);
+    vector<ll> coltime(n), pos(n);
     ll cnt = 0;
     ll pre = -1 * INF;
+    
     REP(i, n){
         if(cnt == 0 && d[i] == WEST){
             if(abs(pre - a[i]) < t){
-                colpos[i] = pre;
+                pos[i] = pre;
                 coltime[i] = abs(pre - a[i]);
+            }else{
+                pos[i] = a[i] - t;
+                coltime[i] = t;
             }
             continue;
         }
         if(d[i] == WEST){
             ll cpos = (a[i - 1] + a[i]) / 2;
             coltime[i] = abs(cpos - a[i]);
-            colpos[i] = a[i] - coltime[i];
+            pos[i] = a[i] - min(coltime[i], t);
             FOR(j, 1, cnt + 1){
                 coltime[i - j] = abs(cpos - a[i - j]);
-                colpos[i - j] = a[i - j] + coltime[i - j];
+                pos[i - j] = a[i - j] + min(coltime[i - j], t);
             }
             cnt = 0;
             pre = cpos;
@@ -76,12 +80,6 @@ int main(){
         }
     }
     REP(i, q){
-        ll nx = x[i] - 1;
-        if(coltime[nx] > t || coltime[nx] == 0){
-            if(d[nx] == WEST) cout << a[nx] - t << endl;
-            else cout << a[nx] + t << endl;
-        }else{
-            cout << colpos[nx] << endl;
-        }
+        cout << pos[x[i] - 1] << endl;
     }
 }
