@@ -17,10 +17,10 @@
 
 using namespace std;
  
-typedef long long i64;
-typedef pair<i64, i64> P;
-static const i64 INF = 1000010000;
-static const i64 MOD = 1000000007;
+typedef long long ll;
+typedef pair<int, int> P;
+static const int INF = 1000010000;
+static const int MOD = 1000000007;
  
 #define FOR(i, a, b) for(int i = (a); i < (b); ++i)
 #define REP(i, n) for(int i = 0; i < (n); ++i)
@@ -36,5 +36,4 @@ static const i64 MOD = 1000000007;
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(0);
-    
 }
