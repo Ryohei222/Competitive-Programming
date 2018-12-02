@@ -36,25 +36,4 @@ static const int MOD = 1000000007;
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(0);
-
-    int n;
-    cin >> n;
-    int num[3][100];
-    REP(i, n){
-        REP(k, 3) cin >> num[k][i];
-    }
-    vector<int> score(n);
-    REP(k, 3){
-        REP(i, n){
-            REP(j, n){
-                if(i == j) continue;
-                if(num[k][i] == num[k][j]){
-                    score[i] -= num[k][i];
-                    break;
-                }
-            }
-            score[i] += num[k][i];
-        }
-    }
-    REP(i, n) cout << score[i] << endl;
 }
