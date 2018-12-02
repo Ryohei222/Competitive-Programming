@@ -21,10 +21,6 @@ typedef long long i64;
 typedef pair<i64, i64> P;
 static const i64 INF = 1000010000;
 static const i64 MOD = 1000000007;
- 
-#define FOR(i, a, b) for(int i = (a); i < (b); ++i)
-#define REP(i, n) for(int i = 0; i < (n); ++i)
-#define SORT(v) sort(v.begin(), v.end());
 
 //int dx[4] = {0,1,0,-1}, dy[4] = {-1,0,1,0};
 //int dx[5] = {-1,0,0,0,1}, dy[5] = {0,-1,0,1,0};
@@ -36,5 +32,5 @@ static const i64 MOD = 1000000007;
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(0);
-    
+
 }
