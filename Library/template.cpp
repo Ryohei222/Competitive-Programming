@@ -19,8 +19,11 @@ using namespace std;
  
 typedef long long i64;
 typedef pair<i64, i64> P;
-static const i64 LINF = numeric_limits<i64>::max();
-static const i64 INF = numeric_limits<i64>::max() / 10;
+
+template<class T>
+const T INF = numeric_limits<T>::max();
+template<class T>
+const T SINF = numeric_limits<T>::max() / 10;
 static const i64 MOD = 1000000007;
 
 //int dx[4] = {0,1,0,-1}, dy[4] = {-1,0,1,0};
@@ -39,5 +42,5 @@ struct edge {
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(0);
-
+	
 }
