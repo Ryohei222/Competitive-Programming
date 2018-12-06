@@ -12,11 +12,11 @@ typedef long long i64;
 //-----end of template-----//
 
 template<typename T>
-struct ParticialSum{
-    // usage: ParticialSum<i64> ps(a); // (a = vector<i64>) - construct particial sum array
+struct CumulativeSum{
+    // usage: CumulativeSum<i64> ps(a); // (a = vector<i64>) - construct particial sum array
     //        query(a, b) - return sum[a, b)
     vector<T> sum;
-    ParticialSum(vector<T> a){
+    CumulativeSum(vector<T> a){
         sum = vector<T>(a.size() + 1);
         sum[0] = 0;
         for(int i = 0; i < a.size(); ++i){
@@ -36,12 +36,12 @@ int main(){
     cin >> n;
     vector<i64> a(n);
     for(i64 i = 0; i < n; ++i) cin >> a[i];
-    ParticialSum<i64> ps(a);
+    CumulativeSum<i64> cs(a);
 
     while(1){
         i64 a, b;
         cin >> a >> b;
         if(a == -1) break;
-        else cout << ps.query(a, b) << endl;
+        else cout << cs.query(a, b) << endl;
     }
 }
