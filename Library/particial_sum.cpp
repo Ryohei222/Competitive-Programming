@@ -24,7 +24,7 @@ struct ParticialSum{
         }
     }
     T query(T x, T y){
-        return sum[max(x, y)] - sum[min(x, y)];
+        return -sum[min(x, y)] + sum[max(x, y)];
     }
 };
 
