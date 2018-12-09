@@ -19,7 +19,11 @@ using namespace std;
  
 typedef long long i64;
 typedef pair<i64, i64> P;
-static const i64 INF = 1000010000;
+
+template<class T>
+const T INF = numeric_limits<T>::max();
+template<class T>
+const T SINF = numeric_limits<T>::max() / 10;
 static const i64 MOD = 1000000007;
 
 //int dx[4] = {0,1,0,-1}, dy[4] = {-1,0,1,0};
@@ -27,29 +31,52 @@ static const i64 MOD = 1000000007;
 //int dx[8] = {-1,0,1,1,1,0,-1,-1}, dy[8] = {1,1,1,0,-1,-1,-1,0};
 //int dx[9] = {-1,0,1,1,1,0,-1,-1,0}, dy[9] = {1,1,1,0,-1,-1,-1,0,0};
 
+struct edge {
+	i64 from, to, cost;
+	edge(i64 to, i64 cost) : from(-1), to(to), cost(cost) {}
+	edge(i64 src, i64 to, i64 cost) : from(src), to(to), cost(cost) {}
+};
+
+template<typename T>
+vector<T> make_v(size_t a){return vector<T>(a);}
+
+template<typename T,typename... Ts>
+auto make_v(size_t a,Ts... ts){
+	return vector<decltype(make_v<T>(ts...))>(a,make_v<T>(ts...));
+}
+
+template<typename T,typename V>
+typename enable_if<is_class<T>::value==0>::type
+fill_v(T &t,const V &v){t=v;}
+
+template<typename T,typename V>
+typename enable_if<is_class<T>::value!=0>::type
+fill_v(T &t,const V &v){
+	for(auto &e:t) fill_v(e,v);
+}
+
 //-----end of template-----//
 
 int main(){
-    int h, w;
-    cin >> h >> w;
-    vector<vector<int> > a;
-    a = vector<vector<int> >(h, vector<int>(w, 0));
-    for(int i = 0; i < h; ++i){
-        for(int j = 0; j < w; ++j){
-            cin >> a[i][j];
-        }
-    }
-
-    int ans = INF;
-
-    for(int i = 0; i < h; ++i){
-        for(int j = 0; j < w; ++j){
-            int tmp = 0;
-            for(int x = 0; x < h; ++x){
-                for(int y = 0; y < w; ++y){
-                    tmp += 
-                }
-            }
-        }
-    }
+    ios_base::sync_with_stdio(false);
+	cin.tie(0);
+	int n;
+	cin >> n;
+	string s;
+	cin >> s;
+	int ans = 0;
+	for(int i = 0; i < s.length() - 1; ++i){
+		if((s[i] == 'O' && s[i + 1] == 'X') || (s[i + 1] == 'O' && s[i] == 'X')){
+			ans++;
+			i++;
+		}
+	}
+	int tmp = 0;
+	for(int i = 1; i < s.length() - 1; ++i){
+		if((s[i] == 'O' && s[i + 1] == 'X') || (s[i + 1] == 'O' && s[i] == 'X')){
+			tmp++;
+			i++;
+		}
+	}
+	cout << max(tmp, ans) << endl;
 }

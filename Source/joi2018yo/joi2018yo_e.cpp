@@ -17,70 +17,77 @@
 
 using namespace std;
  
-typedef long long ll;
-typedef pair<int, int> P;
-static const int INF = 1000010000;
-static const int MOD = 1000000007;
- 
-#define FOR(i, a, b) for(int i = (a); i < (b); ++i)
-#define REP(i, n) for(int i = 0; i < (n); ++i)
-#define SORT(v) sort(v.begin(), v.end());
-#define pb push_back
-#define mp make_pair
-#define np next_permutation
-#define pq priority_queue
+typedef long long i64;
+typedef pair<i64, i64> P;
 
-int dx4[4] = {0,1,0,-1}, dy4[4] = {-1,0,1,0};
-//int dx5[5] = {-1,0,0,0,1}, dy5[5] = {0,-1,0,1,0};
-//int dx8[8] = {-1,0,1,1,1,0,-1,-1}, dy8[8] = {1,1,1,0,-1,-1,-1,0};
-//int dx9[9] = {-1,0,1,1,1,0,-1,-1,0}, dy9[9] = {1,1,1,0,-1,-1,-1,0,0};
+template<class T>
+const T INF = numeric_limits<T>::max();
+template<class T>
+const T SINF = numeric_limits<T>::max() / 10;
+static const i64 MOD = 1000000007;
+
+//int dx[4] = {0,1,0,-1}, dy[4] = {-1,0,1,0};
+//int dx[5] = {-1,0,0,0,1}, dy[5] = {0,-1,0,1,0};
+//int dx[8] = {-1,0,1,1,1,0,-1,-1}, dy[8] = {1,1,1,0,-1,-1,-1,0};
+//int dx[9] = {-1,0,1,1,1,0,-1,-1,0}, dy[9] = {1,1,1,0,-1,-1,-1,0,0};
+
+struct edge {
+	i64 from, to, cost;
+	edge(i64 to, i64 cost) : from(-1), to(to), cost(cost) {}
+	edge(i64 src, i64 to, i64 cost) : from(src), to(to), cost(cost) {}
+};
+
+template<typename T>
+vector<T> make_v(size_t a){return vector<T>(a);}
+
+template<typename T,typename... Ts>
+auto make_v(size_t a,Ts... ts){
+	return vector<decltype(make_v<T>(ts...))>(a,make_v<T>(ts...));
+}
+
+template<typename T,typename V>
+typename enable_if<is_class<T>::value==0>::type
+fill_v(T &t,const V &v){t=v;}
+
+template<typename T,typename V>
+typename enable_if<is_class<T>::value!=0>::type
+fill_v(T &t,const V &v){
+	for(auto &e:t) fill_v(e,v);
+}
 
 //-----end of template-----//
- 
-int main() {
-    // 入力
-    ll dp[31][31], a[31][31], dist[31][31];
-    ll h, w;
-    cin >> h >> w;
-    REP(i, 31) {
-        REP(j, 31) {
-            dist[i][j] = -1;
-        }
-    }
-    REP(i, h) {
-        REP(j, w) {
-            cin >> a[i][j];
-        }
-    }
 
-    dist[0][0] = 0; // (0, 0)までの距離は0
-    dp[0][0] = 0; // (0, 0)までのコストは0
-    queue<P> que;
-    que.push(P(0, 0)); // (0, 0)からスタート
+int main(){
+    ios_base::sync_with_stdio(false);
+	cin.tie(0);
 
-    while (!que.empty()) {
-        auto p = que.front(); que.pop();
-        int x = p.first; int y = p.second; // もともといたマス
-
-        REP(i, 4) {
-            int nx = x + dx4[i]; int ny = y + dy4[i]; //四近傍で回す
-            if (nx < 0 || ny < 0 || nx >= h || ny >= w) continue; // 領域内か判定
-            ll cost = dp[x][y] + (dist[x][y] * 2 + 1) * a[nx][ny]; // https://twitter.com/6Lgug/status/1066718346509348864
-
-            // 行っていないマスもしくは行っているけど現在のコストのほうが少ないなら更新
-            if (dist[nx][ny] == -1 || dp[nx][ny] > cost) {
-                dp[nx][ny] = cost;
-                dist[nx][ny] = dist[x][y] + 1; // 距離は前のマスまでの距離+1なので
-                que.push(P(nx, ny));
-                continue;
-            }
-
-            // コストが同じでも距離が短いなら更新((nx, ny)以降のマスまでの最小コストが減りうるので)
-            if(dp[nx][ny] == cost && dist[nx][ny] > dist[x][y] + 1) {
-                dist[nx][ny] = dist[x][y] + 1;
-                que.push(P(nx, ny));
-            }
-        }
-    }
-    cout << dp[h - 1][w - 1] << endl; // 出力
+	i64 n, m;
+	cin >> n >> m;
+	vector<i64> a(n + 10), l(m), r(m);
+	vector<P> sorted(m);
+	for(i64 i = 0; i < n; ++i) cin >> a[i + 1];
+	for(i64 i = 0; i < m; ++i){
+		cin >> l[i] >> r[i];
+		sorted[i] = P(l[i], r[i]);
+	}
+	sort(sorted.begin(), sorted.end());
+	vector<i64> min_index(n + 10, -1);
+	i64 cnt = 0;
+	for(i64 i = 0; i < m; ++i){
+		cnt = max(cnt, sorted[i].first);
+		while(sorted[i].second >= cnt){
+			min_index[cnt] = sorted[i].first;
+			cnt++;
+		}
+	}
+	vector<i64> dp(n + 10, 0);
+	for(i64 i = 1; i < n + 1; ++i){
+		if(min_index[i] == -1){
+			dp[i] = dp[i - 1] + a[i];
+		}else{
+			dp[i] = max(dp[i - 1], dp[min_index[i] - 1] + a[i]);
+		}
+	}
+	//for(i64 i = 1; i < n + 1; ++i) cout << i << ": " << min_index[i] << endl;
+	cout << dp[n] << endl;
 }

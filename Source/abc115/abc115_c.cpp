@@ -31,12 +31,18 @@ static const i64 MOD = 1000000007;
 //int dx[8] = {-1,0,1,1,1,0,-1,-1}, dy[8] = {1,1,1,0,-1,-1,-1,0};
 //int dx[9] = {-1,0,1,1,1,0,-1,-1,0}, dy[9] = {1,1,1,0,-1,-1,-1,0,0};
 
+struct edge {
+  i64 from, to, cost;
+  edge(i64 to, i64 cost) : from(-1), to(to), cost(cost) {}
+  edge(i64 src, i64 to, i64 cost) : from(src), to(to), cost(cost) {}
+};
+
 template<typename T>
 vector<T> make_v(size_t a){return vector<T>(a);}
 
 template<typename T,typename... Ts>
 auto make_v(size_t a,Ts... ts){
-    return vector<decltype(make_v<T>(ts...))>(a,make_v<T>(ts...));
+  return vector<decltype(make_v<T>(ts...))>(a,make_v<T>(ts...));
 }
 
 template<typename T,typename V>
@@ -46,25 +52,25 @@ fill_v(T &t,const V &v){t=v;}
 template<typename T,typename V>
 typename enable_if<is_class<T>::value!=0>::type
 fill_v(T &t,const V &v){
-    for(auto &e:t) fill_v(e,v);
+  for(auto &e:t) fill_v(e,v);
 }
 
 //-----end of template-----//
 
-#define COLD 0
-#define NORMAL 1
-#define HOT 2
-
-struct edge{
-    i64 from, to, cost;
-    edge(i64 from, i64 to, i64 cost) : from(from), to(to), cost(cost) {}
-};
-
-struct ndata{
-    i64 node, dist, state, pass;
-    ndata(i64 node, i64 dist, i64 state, i64 time) : node(node), dist(dist), state(state), pass(pass) {}
-    bool operator<(const ndata& rhs) const{
-        return dist < rhs.dist;
+template<typename T>
+struct CumulativeSum{
+    // usage: CumulativeSum<i64> ps(a); // (a = vector<i64>) - construct particial sum array
+    //        query(a, b) - return sum[a, b)
+    vector<T> sum;
+    CumulativeSum(vector<T> a){
+        sum = vector<T>(a.size() + 1);
+        sum[0] = 0;
+        for(int i = 0; i < a.size(); ++i){
+            sum[i + 1] = sum[i] + a[i];
+        }
+    }
+    T query(T x, T y){
+        return -sum[min(x, y)] + sum[max(x, y)];
     }
 };
 
@@ -72,21 +78,14 @@ int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(0);
 
-    i64 n, m, x;
-    cin >> n >> m >> x;
-    vector<i64> a(m), b(m), d(m), t(n);
-    for(i64 i = 0; i < n; ++i) cin >> t[i];
-
-    vector<vector<edge> > G;
-    G = vector<vector<edge> >(n);
-
-    for(i64 i = 0; i < m; ++i){
-        cin >> a[i] >> b[i] >> d[i];
-        a[i]--; b[i]--;
-        G[a[i]].push_back(edge(a[i], b[i], d[i]));
-        G[b[i]].push_back(edge(b[i], a[i], d[i]));
-    }
-
-    
-
+	i64 n, k;
+	cin >> n >> k;
+	vector<i64> h(n);
+	for(i64 i = 0; i < n; ++i) cin >> h[i];
+	sort(h.begin(), h.end());
+	i64 ans = INF<i64>;
+	for(i64 i = 0; i < n - k + 1; ++i){
+		ans = min(ans, h[k + i - 1] - h[i]);
+	}
+	cout << ans << endl;
 }
