@@ -56,15 +56,11 @@ fill_v(T &t,const V &v){
 #define HOT 2
 
 struct edge{
-    i64 from, to, cost;
-    edge(i64 from, i64 to, i64 cost) : from(from), to(to), cost(cost) {}
-};
-
-struct ndata{
-    i64 node, dist, state, pass;
-    ndata(i64 node, i64 dist, i64 state, i64 time) : node(node), dist(dist), state(state), pass(pass) {}
-    bool operator<(const ndata& rhs) const{
-        return dist < rhs.dist;
+    i64 to, cost, state, elasped;
+    edge(i64 to, i64 cost) : to(to), cost(cost) {}
+    edge(i64 to, i64 cost, i64 state, i64 elasped) : to(to), cost(cost), state(state), elasped(elasped) {}
+    bool operator<(const edge& rhs) const {
+        return cost < rhs.cost;
     }
 };
 
@@ -78,15 +74,51 @@ int main(){
     for(i64 i = 0; i < n; ++i) cin >> t[i];
 
     vector<vector<edge> > G;
+    vector<vector<edge> > 
     G = vector<vector<edge> >(n);
 
     for(i64 i = 0; i < m; ++i){
         cin >> a[i] >> b[i] >> d[i];
         a[i]--; b[i]--;
-        G[a[i]].push_back(edge(a[i], b[i], d[i]));
-        G[b[i]].push_back(edge(b[i], a[i], d[i]));
+        G[a[i]].push_back(edge(b[i], d[i]));
+        G[b[i]].push_back(edge(a[i], d[i]));
     }
 
-    
+    for(i64 i = 0; i < n; ++i){
+        cin >> t[i];
+    }
 
+    auto dist = make_v<i64>(3, n);
+    auto elasped_time = make_v<i64>(3, n);
+    fill_v(dist, SINF<i64>);
+    fill_v(elasped_time, -1 * SINF<i64>);
+
+    priority_queue<edge, vector<edge> > que;
+    que.push(edge(0, 0, COLD, 0));
+
+    while(!que.empty()){
+        edge p = que.top(); que.pop();
+        if(dist[p.state][p.to] <= p.cost && elasped_time[p.state][p.to] >= p.elasped) continue;
+        dist[p.state][p.to] = min(dist[p.state][p.to], p.cost);
+        elasped_time[p.state][p.to] = max(elasped_time[p.state][p.to], p.elasped);
+        for(i64 i = 0; i < G[p.to].size(); ++i){
+            edge e = G[p.to][i];
+            if(e.to == ) // なにもわからない
+            if((t[p.to] == HOT && t[e.to] == COLD) || (t[p.to] == COLD && t[e.to] == HOT)){
+                if(p.elasped + e.cost < x) continue;
+                que.push(edge(e.to, p.cost + e.cost, t[e.to], 0));
+            }else if(t[e.to] == NORMAL){
+                que.push(edge(e.to, p.cost + e.cost, p.state, p.elasped + e.cost));
+            }else{
+                que.push(edge(e.to, p.cost + e.cost, t[e.to], 0));
+            }
+        }
+    }
+
+    cout << min({dist[COLD][n - 1], dist[NORMAL][n - 1], dist[HOT][n - 1]}) << endl;
 }
+
+// どういうときにpushすればいいのか？
+// 冷静に考えると各頂点について
+// HOT COLD - distが小さいか elaspedが大きいかでpush
+// (state == HOT || state == COLD) && (dist[node] > dist + cost || elasped_time < elasped || (dist[node] == dist + cost && elasped_time < elasped))) 的な
