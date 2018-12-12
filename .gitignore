@@ -1,3 +1,5 @@
 .vscode/
 *.exe
 sandbox/
+Source/*/*.ps1
+Source/*/*.py
