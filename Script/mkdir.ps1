@@ -12,6 +12,16 @@ if(!(Test-Path $cpath)){
     Copy-Item "run.ps1" $cpath
 }
 
+$cpath = "${path}/test.ps1"
+if(!(Test-Path $cpath)){
+    Copy-Item "test.ps1" $cpath
+}
+
+$cpath = "${path}/download_testcase.py"
+if(!(Test-Path $cpath)){
+    Copy-Item "download_testcase.py" $cpath
+}
+
 $path = "${path}/${contestID}_"
 $probCount = Read-Host "Put the number of problems"
 $probCount = [int]$probCount
