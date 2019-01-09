@@ -5,12 +5,11 @@ import sys
 
 import lxml.html
 import requests
-from termcolor import cprint
 
 
 class AtCoder:
 
-	LOGIN_URL = 'https://beta.atcoder.jp/login'
+	LOGIN_URL = 'https://atcoder.jp/login'
 
 	def __init__(self):
 		self.session = requests.Session()
@@ -25,13 +24,13 @@ class AtCoder:
 		self.session.post(self.LOGIN_URL, data=payload)
 
 	def get_problems(self, contest_id):
-		res = self.session.get(f'https://beta.atcoder.jp/contests/{contest_id}/submit')
+		res = self.session.get(f'https://atcoder.jp/contests/{contest_id}/submit')
 		tree = lxml.html.fromstring(res.text)
 		problems = tree.xpath('//*[@id="select-task"]/option/@value')
 		return problems
 
 	def get_testcase(self, contest_id, problem_id, testcase_id):
-		res = self.session.get(f'https://beta.atcoder.jp/contests/{contest_id}/tasks/{problem_id}?lang=ja')
+		res = self.session.get(f'https://atcoder.jp/contests/{contest_id}/tasks/{problem_id}?lang=ja')
 		tree = lxml.html.fromstring(res.text) # raise Exception()
 		if len(tree.xpath(f'//h3[text()="Sample Input {testcase_id}"]')) == 0:
 			raise Exception()
@@ -65,7 +64,7 @@ class AtCoder:
 			'sourceCode':submit_data,
 			'csrf_token':self.csrf_token
 		}
-		self.session.post(f'https://beta.atcoder.jp/contests/{contest_id}/submit', data=payload)
+		self.session.post(f'https://atcoder.jp/contests/{contest_id}/submit', data=payload)
 
 def compile(filename):
 	if pathlib.Path(f'./a.exe').exists():
@@ -89,9 +88,9 @@ def run_test(filename):
 		exit(-1)
 
 if __name__ == '__main__':
-    args = sys.argv
-    contest_id = args[1]
-    problem_id = args[2]
+	args = sys.argv
+	contest_id = args[1]
+	problem_id = args[2]
 	atcoder = AtCoder()
 	atcoder.save_testcases(contest_id)
 	filename = f'{problem_id}.cpp'
@@ -110,9 +109,11 @@ if __name__ == '__main__':
 		ans = pathlib.Path(path_out).open().read()
 		print(f'test{testcase_id} status:', end='')
 		if res == ans:
-			cprint('AC', 'green')
+			#cprint('AC', 'green')
+			print('AC')
 		else:
-			cprint('WA', 'yellow')
+			#cprint('WA', 'yellow')
+			print('WA')
 			flag = False
 		print('sample input\n', pathlib.Path(path_in).open().read())
 		print('program output\n', res)
