@@ -60,4 +60,22 @@ fill_v(T &t,const V &v){
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
+	int n;
+	cin >> n;
+	vector<i64> a(n), b(n);
+	for(int i = 0; i < n; ++i) cin >> a[i] >> b[i];
+	vector<P> x(n);
+	for(int i = 0; i < n; ++i) x[i] = P(a[i] - b[i], i);
+	sort(x.begin(), x.end())
+	i64 ans = 0;
+	i64 sa, sb;
+	sa = sb = 0;
+	for(int i = 0; i < n; ++i){
+		if(i % 2 == 0){
+			sa += a[x[i].second];
+		}else{
+			sb += b[x[i].second];
+		}
+	}
+	cout << sa - sb << endl;
 }

@@ -60,4 +60,16 @@ fill_v(T &t,const V &v){
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
+	int a, b;
+	cin >> a >> b;
+	int ha = 0;
+	int hb = 1;
+	for(int i = 1; i < 1000; ++i){
+		ha += i;
+		hb += i + 1;
+		if(ha - a == hb - b){
+			cout << ha - a << endl;
+			return 0;
+		}
+	}
 }

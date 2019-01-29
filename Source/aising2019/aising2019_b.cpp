@@ -60,4 +60,16 @@ fill_v(T &t,const V &v){
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
+	int n, a, b;
+	cin >> n >> a >> b;
+	int x, y, z;
+	x = y = z = 0;
+	for(int i = 0; i < n; ++i){
+		int p;
+		cin >> p;
+		if(p <= a) x++;
+		else if(p <= b) y++;
+		else z++;
+	}
+	cout << min(x, min(y, z)) << endl;
 }

@@ -123,4 +123,4 @@ if __name__ == '__main__':
 	if flag:
 		flag = input('All testcases passed. Submit this solution? (y/n): ')
 		if flag == 'y':
-			atcoder.submit(contest_id, f'{contest_id}_{problem_id}', pathlib.Path(f'{contest_id}_{problem_id}.cpp').open().read(), 3003)
+			atcoder.submit(contest_id, problem_id, pathlib.Path(f'{problem_id}.cpp').open().read(), 3003)

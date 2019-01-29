@@ -60,4 +60,40 @@ fill_v(T &t,const V &v){
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
+	i64 n;
+	cin >> n;
+	vector<i64> a(n), b(n);
+	for(int i = 0; i < n; ++i) cin >> a[i];
+	for(int i = 0; i < n; ++i) cin >> b[i];
+	vector<i64> sorted(n);
+	for(int i = 0; i < n; ++i){
+		sorted[i] = a[i] - b[i];
+	}
+	sort(sorted.begin(), sorted.end());
+	i64 cnt, sum;
+	cnt = sum = 0;
+	for(int i = 0; i < n; ++i){
+		if(sorted[i] >= 0) break;
+		else{
+			cnt++;
+			sum += sorted[i];
+		}
+	}
+	bool flag = false;
+	for(int i = n - 1; i >= 0; --i){
+		if(sum >= 0){
+			flag = true;
+			break;
+		}
+		if(sorted[i] < 0) break;
+		else{
+			cnt++;
+			sum += sorted[i];
+		}
+	}
+	if(sum >= 0){
+		cout << cnt << endl;
+	}else{
+		cout << -1 << endl;
+	}
 }

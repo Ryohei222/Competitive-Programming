@@ -60,4 +60,9 @@ fill_v(T &t,const V &v){
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
+	vector<int> a(4);
+	for(int i = 0; i < 4; ++i) cin >> a[i];
+	sort(a.begin(), a.end());
+	if(a[0] == 1 && a[1] == 4 && a[2] == 7 && a[3] == 9) cout << "YES" << endl;
+	else cout << "NO" << endl;
 }

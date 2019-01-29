@@ -60,4 +60,33 @@ fill_v(T &t,const V &v){
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
+	int n, m;
+	cin >> n >> m;
+	vector<vector<edge>> G(n);
+	vector<int> cnt(n + m);
+	vector<int> a(n + m - 1), b(n + m - 1);
+	for(int i = 0; i < n + m - 1; ++i){
+		cin >> a[i] >> b[i];
+		a[i]--; b[i]--;
+		G[a[i]].push_back(edge(a[i], b[i], i));
+		cnt[b[i]]++;
+	}
+	int root;
+	for(int i = 0; i < n; ++i) if(cnt[i] == 0) root = i;
+	queue<int> que;
+	que.push(root);
+	vector<int> ans(n);
+	ans[root] = 0;
+	while(!que.empty()){
+		int v = que.front();
+		que.pop();
+		for(int i = 0; i < G[v].size(); ++i){
+			if(cnt[G[v][i].to] == 1){
+				ans[G[v][i].to] = v + 1;
+				que.push(G[v][i].to);
+			}
+			cnt[G[v][i].to]--;
+		}
+	}
+	for(int i = 0; i < n; ++i) cout << ans[i] << endl;
 }

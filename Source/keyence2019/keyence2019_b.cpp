@@ -60,4 +60,16 @@ fill_v(T &t,const V &v){
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
+	string s;
+	cin >> s;
+	bool flag = false;
+	for(int i = 0; i < s.length(); ++i){
+		for(int j = i; j < s.length(); ++j){
+			if(s.substr(0, i) + s.substr(j, s.length() - j) == "keyence"){
+				flag = true;
+			}
+		}
+	}
+	if(flag) cout << "YES" << endl;
+	else cout << "NO" << endl;
 }

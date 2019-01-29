@@ -58,6 +58,6 @@ fill_v(T &t,const V &v){
 //-----end of template-----//
 
 int main(){
-	ios_base::sync_with_stdio(false);
+    ios_base::sync_with_stdio(false);
 	cin.tie(0);
 }
