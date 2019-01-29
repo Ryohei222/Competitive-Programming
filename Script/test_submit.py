@@ -53,7 +53,7 @@ class AtCoder:
 				for key in testcase.keys():
 					path = pathlib.Path(f'./testcase/{problem_id}_{key}{testcase_id}.txt')
 					path.touch()
-					path.write_text(testcase[key].rstrip())
+					path.write_text(testcase[key].rstrip().replace('\r\n', ' '))
 				testcase_id += 1
 
 
@@ -92,7 +92,8 @@ if __name__ == '__main__':
 	contest_id = args[1]
 	problem_id = args[2]
 	atcoder = AtCoder()
-	atcoder.save_testcases(contest_id)
+	if not pathlib.Path(f'./testcase/{problem_id}_in1.txt').exists():
+		atcoder.save_testcases(contest_id)
 	filename = f'{problem_id}.cpp'
 	if 'error' in compile(filename):
 		print('failed in compile')

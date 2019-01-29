@@ -60,4 +60,15 @@ fill_v(T &t,const V &v){
 int main(){
     ios_base::sync_with_stdio(false);
 	cin.tie(0);
+	int n;
+	cin >> n;
+	vector<i64> h(n);
+	for(int i = 0; i < n; ++i) cin >> h[i];
+	vector<i64> dp(n + 10, INF<int>);
+	dp[0] = 0;
+	for(int i = 0; i < n; ++i){
+		dp[i + 1] = min(dp[i + 1], dp[i] + abs(h[i + 1] - h[i]));
+		if(i != n - 1) dp[i + 2] = min(dp[i + 2], dp[i] + abs(h[i + 2] - h[i]));
+	}
+	cout << dp[n - 1] << endl;
 }

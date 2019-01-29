@@ -60,4 +60,19 @@ fill_v(T &t,const V &v){
 int main(){
     ios_base::sync_with_stdio(false);
 	cin.tie(0);
+	int n;
+	cin >> n;
+	auto v = make_v<i64>(n, 3);
+	for(int i = 0; i < n; ++i){
+		for(int j = 0; j < 3; ++j) cin >> v[i][j];
+	}
+	auto dp = make_v<i64>(n + 1, 3);
+	fill_v(dp, -1 * INF<i64>);
+	dp[0][0] = dp[0][1] = dp[0][2] = 0;
+	for(int i = 0; i < n; ++i){
+		for(int j = 0; j < 3; ++j){
+			dp[i + 1][j] = v[i][j] + max(dp[i][(j + 1) % 3], dp[i][(j + 2) % 3]);
+		}
+	}
+	cout << max(dp[n][0], max(dp[n][1], dp[n][2])) << endl;
 }

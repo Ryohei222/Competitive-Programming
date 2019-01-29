@@ -58,6 +58,19 @@ fill_v(T &t,const V &v){
 //-----end of template-----//
 
 int main(){
-    ios_base::sync_with_stdio(false);
+	ios_base::sync_with_stdio(false);
 	cin.tie(0);
+	int n, k;
+	cin >> n >> k;
+	vector<i64> h(n);
+	for(int i = 0; i < n; ++i) cin >> h[i];
+	vector<i64> dp(n, INF<i64>);
+	dp[0] = 0;
+	for(int i = 0; i < n; ++i){
+		for(int j = 1; j <= k; ++j){
+			if(i + j >= n) break;
+			dp[i + j] = min(dp[i + j], dp[i] + abs(h[i + j] - h[i]));
+		}
+	}
+	cout << dp[n - 1] << endl;
 }

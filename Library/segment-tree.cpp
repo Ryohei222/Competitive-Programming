@@ -1,6 +1,3 @@
-/*
-https://ei1333.github.io/luzhiled/snippets/structure/segment-tree.html
-*/
 #include <iostream>
 #include <algorithm>
 #include <functional>
@@ -15,52 +12,51 @@ typedef long long i64;
 //-----end of template-----//
 
 template< typename Monoid >
-struct SegmentTree {
+struct SegmentTree{
+    typedef function<Monoid(Monoid, Monoid)> F;
+    
+    int n, sz;
+    vector<Monoid> node;
+    F f;
+    Monoid M1;
 
-  int size;
-  vector<Monoid> seg;
-  const function<Monoid(Monoid, Monoid)> f;
-  const Monoid M1;
- 
-  SegmentTree(int n, const function<Monoid(Monoid, Monoid)> f, const Monoid &M1) : f(f), M1(M1) {
-    size = 1;
-    while(size < n) size <<= 1;
-    seg.assign(2 * size, M1);
-  }
- 
-  void set(int k, const Monoid &x) {
-    seg[k + size] = x;
-  }
- 
-  void build() {
-    for(int k = size - 1; k > 0; k--) {
-      seg[k] = f(seg[2 * k + 0], seg[2 * k + 1]);
+    SegmentTree(vector<Monoid> v, F f, Monoid M1) : f(f), M1(M1){
+        sz = v.size();
+        n = 1;
+        while(n < sz) n *= 2;
+        node.assign(2 * n, M1);
+        for(int i = 0; i < sz; ++i) node[n + i] = v[i];
+        for(int i = n - 1; i > 0; --i) node[i] = f(node[2 * i], node[2 * i + 1]);
     }
-  }
- 
-  void update(int k, const Monoid &x) {
-    k += size;
-    seg[k] = x;
-    while(k >>= 1) {
-      seg[k] = f(seg[2 * k + 0], seg[2 * k + 1]);
+
+    void update(int k, Monoid val){
+        k += n;
+        node[k] = val;
+        while(k >>= 1){
+            node[k] = f(node[2 * k], node[2 * k + 1]);
+        }
     }
-  }
- 
-  Monoid query(int a, int b) {
-    Monoid L = M1, R = M1;
-    for(a += size, b += size; a < b; a >>= 1, b >>= 1) {
-      if(a & 1) L = f(L, seg[a++]);
-      if(b & 1) R = f(seg[--b], R);
+
+    Monoid query(int a, int b){
+        Monoid l = M1, r = M1;
+        for(a += n, b += n; a != b; a >>= 1, b >>= 1){
+            if(a & 1) l = f(l, node[a++]);
+            if(b & 1) r = f(node[--b], r);
+        }
+        return f(l, r);
     }
-    return f(L, R);
-  }
- 
-  Monoid operator[](const int &k) const {
-    return seg[k + size];
-  }
 };
 
-
 int main(){
-
+    int n, q;
+    cin >> n >> q;
+    vector<int> v(n, (1LL<<31) - 1);
+    SegmentTree<int> seg(v, [](int a, int b){ return min(a, b);}, std::numeric_limits<int>::max());
+    for(int i = 0; i < q; ++i){
+        int com, x, y;
+        cin >> com >> x >> y;
+        if(com == 0) seg.update(x, y);
+        if(com == 1) cout << seg.query(x, y + 1) << endl;
+    }
+    return 0;
 }
