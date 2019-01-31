@@ -53,7 +53,7 @@ class AtCoder:
 				for key in testcase.keys():
 					path = pathlib.Path(f'./testcase/{problem_id}_{key}{testcase_id}.txt')
 					path.touch()
-					path.write_text(testcase[key].rstrip().replace('\r\n', ' '))
+					path.write_text(testcase[key].rstrip().replace('\r\n', '\n'))
 				testcase_id += 1
 
 
@@ -116,9 +116,13 @@ if __name__ == '__main__':
 			#cprint('WA', 'yellow')
 			print('WA')
 			flag = False
-		print('sample input\n', pathlib.Path(path_in).open().read())
-		print('program output\n', res)
-		print('sample output\n', ans)
+		print('sample input')
+		with pathlib.Path(path_in).open() as f:
+			lines = f.read().split('\n')
+			for line in lines:
+    				print(line)
+		print(f'program output\n{res}')
+		print(f'sample output\n{ans}')
 		print('---------------------------')
 		testcase_id += 1
 	if flag:
