@@ -58,47 +58,37 @@ fill_v(T &t,const V &v){
 
 #pragma endregion
 
-int t[3] = {3, 5, 7};
-string n;
+int dp[310][310];
+string s;
 
-int rec(int k, bool flag, vector<bool> flags){
-	if(k == n.length()){
-		int cnt = 0;
-		for(int i = 0; i < 3; ++i) if(flags[i]) cnt++;
-		if(cnt == 3) return 1;
+int rec(int l, int r){
+	if(dp[l][r] != -1) return dp[l][r];
+	if(r - l + 1 <= 2) return 0;
+	if(r - l + 1 == 3){
+		if(s.substr(l, 3) == "iwi") return 3;
 		else return 0;
 	}
-	int sum = 0;
-	if(flag){
-		for(int i = 0; i < 3; ++i){
-			vector<bool> tmp = flags;
-			tmp[i] = true;
-			sum += rec(k + 1, true, tmp);
-		}
-	}else{
-		for(int i = 0; i < 3; ++i){
-			vector<bool> tmp = flags;
-			tmp[i] = true;
-			if((n[k] - '0') > t[i]){
-				sum += rec(k + 1, true, tmp); 
-			}else if((n[k] - '0') == t[i]){
-				sum += rec(k + 1, false, tmp);
-				break;
-			}
+	int ret = 0;
+	if((r - l + 1) % 3 == 0 && s[l] == 'i' && s[r] == 'i'){
+		for(int i = l + 1; i < r; ++i){
+			if(s[i] == 'w' && i - l - 1 == rec(l + 1, i - 1) && r - i - 1 == rec(i + 1, r - 1)) ret = r - l + 1;
 		}
 	}
-	return sum;
+	for(int i = l; i < r; ++i){
+		ret = max(ret, rec(l, i) + rec(i + 1, r));
+	}
+	dp[l][r] = ret;
+	return ret;
 }
 
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
-	cin >> n;
-	vector<bool> flag(3, false);
-	int ans = 0;
-	for(int i = 0; i < n.length() - 1; ++i){
-		if(i == 0) ans += rec(i, false, flag);
-		else ans += rec(i, true, flag);
+	cin >> s;
+	for(int i = 0; i < 310; ++i){
+		for(int j = 0; j < 310; ++j){
+			dp[i][j] = -1;
+		}
 	}
-	cout << ans << endl;
+	cout << rec(0, s.length() - 1) / 3 << endl;
 }
