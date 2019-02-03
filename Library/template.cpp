@@ -1,3 +1,4 @@
+#pragma region include, macro
 #include <iostream>
 #include <algorithm>
 #include <functional>
@@ -54,10 +55,10 @@ typename enable_if<is_class<T>::value!=0>::type
 fill_v(T &t,const V &v){
 	for(auto &e:t) fill_v(e,v);
 }
-
-//-----end of template-----//
+#pragma endregion
 
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
+	
 }
