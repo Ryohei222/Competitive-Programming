@@ -60,4 +60,19 @@ fill_v(T &t,const V &v){
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
+	int s;
+	cin >> s;
+	vector<bool> used(1000000, false);
+	int cnt = 1;
+	while(true){
+		if(used[s]){
+			cout << cnt << endl;
+			break;
+		}else{
+			used[s] = true;
+			if(s % 2 == 0) s /= 2;
+			else s = 3 * s +  1;
+			cnt++;
+		}
+	}
 }

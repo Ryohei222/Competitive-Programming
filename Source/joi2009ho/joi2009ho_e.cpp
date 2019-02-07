@@ -27,7 +27,7 @@ template<class T>
 const T SINF = numeric_limits<T>::max() / 10;
 static const i64 MOD = 1000000007;
 
-//int dx[4] = {0,1,0,-1}, dy[4] = {-1,0,1,0};
+int dx[4] = {0,1,0,-1}, dy[4] = {-1,0,1,0};
 //int dx[5] = {-1,0,0,0,1}, dy[5] = {0,-1,0,1,0};
 //int dx[8] = {-1,0,1,1,1,0,-1,-1}, dy[8] = {1,1,1,0,-1,-1,-1,0};
 //int dx[9] = {-1,0,1,1,1,0,-1,-1,0}, dy[9] = {1,1,1,0,-1,-1,-1,0,0};
@@ -61,25 +61,60 @@ fill_v(T &t,const V &v){
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
-    int h, w;
-    cin >> h >> w;
-    vector<vector<int>> ans(h, vector<int>(w, -1));
-    for(int i = 0; i < h; ++i){
-        string s;
-        cin >> s;
-        for(int j = 0; j < w; ++j){
-            for(int k = 0; k < j + 1; ++k){
-                if(s[k] == 'c'){
-                    ans[i][j] = j - k;
-                }
-            }
-        }
-    }
-    for(int i = 0; i < h; ++i){
-        for(int j = 0; j < w; ++j){
-            cout << ans[i][j];
-            if(j != w - 1) cout << " ";
-        }
-        cout << endl;
-    }
+	i64 r;
+	cin >> r;
+	for(i64 k = 0; k < 2; ++k){
+		i64 w, h, x, y;
+		cin >> w >> h >> x >> y;
+		i64 level[500][500];
+		vector<i64> ulv;
+		for(i64 i = 0; i < h; ++i){
+			for(i64 j = 0; j < w; ++j){
+				cin >> level[i][j];
+				ulv.push_back(level[i][j]);
+			}
+		}
+		sort(ulv.begin(), ulv.end());
+  		ulv.erase(unique(ulv.begin(), ulv.end()), ulv.end());
+		unordered_map<i64, i64> mp;
+		for(i64 i = 0; i < ulv.size(); ++i) mp[ulv[i]] = i;
+		vector<vector<P>> pos(ulv.size());
+		for(i64 i = 0; i < h; ++i){
+			for(i64 j = 0; j < w; ++j){
+				pos[mp[level[i][j]]].push_back(P(i, j));
+			}
+		}
+		vector<vector<bool>> used(500, vector<bool>(500, false));
+		for(i64 i = 0; i < ulv.size(); ++i){
+			for(i64 j = 0; j < pos[i].size(); ++j){
+				P p = pos[i][j];
+				i64 cnt = 0;
+				i64 nx = p.first, ny = p.second;
+				if(used[nx][ny]) continue;
+				queue<P> que;
+				for(int g = 0; g < 4; ++g){
+					int tx = nx + dx[g];
+					int ty = ny + dy[g];
+					if(used[tx][ty] && level[tx][ty] < level[nx][ny]){
+						que.push(P(nx, ny));
+					}
+				}
+				while(!que.empty()){
+					p = que.front();
+					nx = p.first; ny = p.second;
+					if(used[nx][ny]) continue;
+					used[nx][ny] = true;
+					cnt++;
+					for(int g = 0; g < 4; ++g){
+						int tx = nx + dx[g];
+						int ty = ny + dy[g];
+						if(used[tx][ty]) continue;
+						if(level[tx][ty] <= ulv[i]){
+							que.push(P(tx, ty));
+						}
+					}
+				}
+			}
+		}
+	}
 }

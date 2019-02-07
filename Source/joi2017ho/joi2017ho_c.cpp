@@ -1,3 +1,4 @@
+#pragma region includes, macros
 #include <iostream>
 #include <algorithm>
 #include <functional>
@@ -55,9 +56,30 @@ fill_v(T &t,const V &v){
 	for(auto &e:t) fill_v(e,v);
 }
 
-//-----end of template-----//
+#pragma endregion
 
 int main(){
-    ios_base::sync_with_stdio(false);
+	ios_base::sync_with_stdio(false);
 	cin.tie(0);
+	i64 n, m, k, a, b, c, t;
+	cin >> n >> m >> k >> a >> b >> c >> t;
+	vector<i64> s(m);
+	for(int i = 0; i < m; ++i) cin >> s[i];
+	// 必要なもの - 新設する場所 : pos, これまでの所要時間 : cost, 新たに増える駅の数 num
+	vector<i64> pos(m - 1), cost(m - 1), num(m - 1);
+	for(int i = 0; i < m - 1; ++i){
+		if(t >= ((s[i + 1] - 1) - s[i]) * a + i * b){
+			// 区間が全て普通でカバーされている
+			pos[i] = -1;
+			cost[i] = num[i] = 0;
+		}else if(i * b + c > t){
+			// 区間のどこにも到達できない
+			pos[i] = -1;
+			cost[i] = num[i] = 0;
+		}else{
+			// 区間に新設すると増えるとき
+			pos[i] = (t - i * b + a - 1) / a + s[i];
+			cost[i] = 
+		}
+	}
 }
