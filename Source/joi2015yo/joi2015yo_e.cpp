@@ -1,3 +1,4 @@
+#pragma region includes, macros
 #include <iostream>
 #include <algorithm>
 #include <functional>
@@ -17,74 +18,112 @@
 
 using namespace std;
  
-typedef long long ll;
-typedef pair<int, int> P;
-static const int INF = 1000010000;
-static const int MOD = 1000000007;
- 
-#define FOR(i, a, b) for(int i = (a); i < (b); ++i)
-#define REP(i, n) for(int i = 0; i < (n); ++i)
-#define SORT(v) sort(v.begin(), v.end());
-#define pb push_back
-#define mp make_pair
-#define np next_permutation
-#define pq priority_queue
+typedef long long i64;
+typedef pair<i64, i64> P;
 
-//int dx4[4] = {0,1,0,-1}, dy4[4] = {-1,0,1,0};
-//int dx5[5] = {-1,0,0,0,1}, dy5[5] = {0,-1,0,1,0};
-int dx[8] = {-1,0,1,1,1,0,-1,-1}, 
-    dy[8] = {1,1,1,0,-1,-1,-1,0};
-//int dx9[9] = {-1,0,1,1,1,0,-1,-1,0}, dy9[9] = {1,1,1,0,-1,-1,-1,0,0};
+template<class T>
+const T INF = numeric_limits<T>::max();
+template<class T>
+const T SINF = numeric_limits<T>::max() / 10;
+static const i64 MOD = 1000000007;
 
-//-----end of template-----//
+//int dx[4] = {0,1,0,-1}, dy[4] = {-1,0,1,0};
+//int dx[5] = {-1,0,0,0,1}, dy[5] = {0,-1,0,1,0};
+int dx[8] = {-1,0,1,1,1,0,-1,-1}, dy[8] = {1,1,1,0,-1,-1,-1,0};
+//int dx[9] = {-1,0,1,1,1,0,-1,-1,0}, dy[9] = {1,1,1,0,-1,-1,-1,0,0};
+
+struct edge {
+	i64 from, to, cost;
+	edge(i64 to, i64 cost) : from(-1), to(to), cost(cost) {}
+	edge(i64 src, i64 to, i64 cost) : from(src), to(to), cost(cost) {}
+};
+
+template<typename T>
+vector<T> make_v(size_t a){return vector<T>(a);}
+
+template<typename T,typename... Ts>
+auto make_v(size_t a,Ts... ts){
+	return vector<decltype(make_v<T>(ts...))>(a,make_v<T>(ts...));
+}
+
+template<typename T,typename V>
+typename enable_if<is_class<T>::value==0>::type
+fill_v(T &t,const V &v){t=v;}
+
+template<typename T,typename V>
+typename enable_if<is_class<T>::value!=0>::type
+fill_v(T &t,const V &v){
+	for(auto &e:t) fill_v(e,v);
+}
+
+#pragma endregion
 
 int main(){
-    ios_base::sync_with_stdio(false);
-    cin.tie(0);
-
-    int h, w;
+	ios_base::sync_with_stdio(false);
+	cin.tie(0);
+    i64 h, w;
     cin >> h >> w;
-    vector<string> s(h), next_s;
-    REP(i, h) cin >> s[i];
-
-    queue<P> current, next;
-
-    REP(i, h) REP(j, w){
-        if(s[i][j] != '.' && s[i][j] != '9') current.push(P(i, j));
+    vector<vector<int>> mas(h, vector<int>(w, 0));
+    vector<vector<bool>> used(h, vector<bool>(w, false));
+    for(int i = 0; i < h; ++i){
+        for(int j = 0; j < w; ++j){
+            char c;
+            cin >> c;
+            if(c == '.') used[i][j] = true;
+            else mas[i][j] = (int)c - (int)'0';
+        }
     }
-    next_s = move(s);
-
-    int ans = 0;
-
-    while(current.size() > 0){
-        s = next_s;
-        while(current.size() > 0){
-            auto p = current.front(); current.pop();
-            int x = p.first, y = p.second;
+    vector<vector<bool>> tused = used;
+    queue<P> que;
+    for(int i = 0; i < h; ++i){
+        for(int j = 0; j < w; ++j){
+            if(used[i][j]) continue;
             int cnt = 0;
-            bool flag = true;
-            if(s[x][y] == '.' || s[x][y] == '9') continue;
-            REP(k, 8){
-                int nx = x + dx[k];
-                int ny = y + dy[k];
-                if(s[nx][ny] == '.') cnt++;
+            for(int k = 0; k < 8; ++k){
+                int nx = i + dx[k];
+                int ny = j + dy[k];
+                if(used[nx][ny]) cnt++;
             }
-            if(s[x][y] - '0' <= cnt){
-                flag = false;
-                next_s[x][y] = '.';
-                REP(k, 8){
+            if(cnt >= mas[i][j]){
+                que.push(P(i, j));
+                tused[i][j] = true;
+            }
+        }
+    }
+    if(que.size() == 0){
+        cout << 0 << endl;
+        return 0;
+    }
+    int ans = 1;
+    while(1){
+        bool flag = true;
+        queue<P> tque;
+        used = tused;
+        while(!que.empty()){
+            P p = que.front(); que.pop();
+            for(int n = 0; n < 8; ++n){
+                int x = p.first + dx[n];
+                int y = p.second + dy[n];
+                if(used[x][y] || tused[x][y]) continue;
+                int cnt = 0;
+                for(int k = 0; k < 8; ++k){
                     int nx = x + dx[k];
                     int ny = y + dy[k];
-                    if(!(s[nx][ny] == '.' || s[nx][ny] == '9' || next_s[nx][ny] == '.' || next_s[nx][ny] == '9')){
-                        next.push(P(nx, ny));
+                    if(nx < 0 || ny < 0 || nx >= h || ny >= w) continue;
+                    if(used[nx][ny]){
+                        ++cnt;
                     }
+                }
+                if(cnt >= mas[x][y]){
+                    tque.push(P(x, y));
+                    tused[x][y] = true;
+                    flag = false;
                 }
             }
         }
-        ans++;
-        cout << next.size() << endl;
-        current = move(next);
+        if(flag) break;
+        que = tque;
+        ++ans;
     }
-
     cout << ans << endl;
 }

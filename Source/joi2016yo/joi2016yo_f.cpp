@@ -60,5 +60,26 @@ fill_v(T &t,const V &v){
 int main(){
     ios_base::sync_with_stdio(false);
 	cin.tie(0);
-    //*[@id="select-task"]/option[1]
+    int h, w;
+	cin >> h >> w;
+	vector<vector<int>> v(h, vector<int>(w, 0));
+	for(int i = 0; i < h; ++i){
+		for(int j = 0; j < w; ++j){
+			char c;
+			cin >> c;
+			if(c != '.') v[i][j] = (int)c - (int)'0';
+		}
+	}
+	int dp[1000][1000][2][2];
+	for(int i = 0; i < 1000; ++i){
+		for(int j = 0; j < 1000; ++j){
+			dp[i][j][0][0] = dp[i][j][0][1] = dp[i][j][1][0] = dp[i][j][1][1] = SINF<int>;
+		}
+	}
+	dp[0][0][0][0] = 0;
+	for(int i = 0; i < h; ++i){
+		for(int j = 0; j < w; ++j){
+			dp[i + 1][j][1][0] = ;;
+		}
+	}
 }

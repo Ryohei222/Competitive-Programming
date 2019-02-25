@@ -13,7 +13,7 @@ typedef long long i64;
 
 template<typename T>
 struct CumulativeSum{
-    // usage: CumulativeSum<i64> ps(a); // (a = vector<i64>) - construct particial sum array
+    // usage: CumulativeSum<i64> ps(a); // (a := vector<i64>) - construct particial sum array
     //        query(a, b) - return sum[a, b)
     vector<T> sum;
     CumulativeSum(vector<T> a){

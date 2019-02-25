@@ -1,3 +1,4 @@
+#pragma region includes, macros
 #include <iostream>
 #include <algorithm>
 #include <functional>
@@ -32,9 +33,9 @@ static const i64 MOD = 1000000007;
 //int dx[9] = {-1,0,1,1,1,0,-1,-1,0}, dy[9] = {1,1,1,0,-1,-1,-1,0,0};
 
 struct edge {
-  i64 from, to, cost;
-  edge(i64 to, i64 cost) : from(-1), to(to), cost(cost) {}
-  edge(i64 src, i64 to, i64 cost) : from(src), to(to), cost(cost) {}
+	i64 from, to, cost;
+	edge(i64 to, i64 cost) : from(-1), to(to), cost(cost) {}
+	edge(i64 src, i64 to, i64 cost) : from(src), to(to), cost(cost) {}
 };
 
 template<typename T>
@@ -42,7 +43,7 @@ vector<T> make_v(size_t a){return vector<T>(a);}
 
 template<typename T,typename... Ts>
 auto make_v(size_t a,Ts... ts){
-  return vector<decltype(make_v<T>(ts...))>(a,make_v<T>(ts...));
+	return vector<decltype(make_v<T>(ts...))>(a,make_v<T>(ts...));
 }
 
 template<typename T,typename V>
@@ -52,31 +53,42 @@ fill_v(T &t,const V &v){t=v;}
 template<typename T,typename V>
 typename enable_if<is_class<T>::value!=0>::type
 fill_v(T &t,const V &v){
-  for(auto &e:t) fill_v(e,v);
+	for(auto &e:t) fill_v(e,v);
 }
 
-//-----end of template-----//
+#pragma endregion
 
-i64 h[100], p[100];
+int dp[310][310];
+string s;
 
-i64 rec(i64 n, i64 x){
-	if(x <= 0) return 0;
-	if(x == h[n] || x == h[n] - 1) return p[n];
-	if(x > h[n - 1] + 2) return p[n - 1] + 1 + rec(n - 1, x - h[n - 1] - 2);
-	if(x == h[n - 1] + 2) return p[n - 1] + 1;
-	if(x == h[n - 1] + 1) return p[n - 1];
-	else return rec(n - 1, x - 1);
+int rec(int l, int r){
+	if(dp[l][r] != -1) return dp[l][r];
+	if(r - l + 1 <= 2) return 0;
+	if(r - l + 1 == 3){
+		if(s.substr(l, 3) == "iwi") return 3;
+		else return 0;
+	}
+	int ret = 0;
+	if((r - l + 1) % 3 == 0 && s[l] == 'i' && s[r] == 'i'){
+		for(int i = l + 1; i < r; ++i){
+			if(s[i] == 'w' && i - l - 1 == rec(l + 1, i - 1) && r - i - 1 == rec(i + 1, r - 1)) ret = r - l + 1;
+		}
+	}
+	for(int i = l; i < r; ++i){
+		ret = max(ret, rec(l, i) + rec(i + 1, r));
+	}
+	dp[l][r] = ret;
+	return ret;
 }
 
 int main(){
-	ios::sync_with_stdio(false);
+	ios_base::sync_with_stdio(false);
 	cin.tie(0);
-	i64 n, x;
-	cin >> n >> x;	
-	h[0] = p[0] = 1;
-	for(int i = 0; i < 50; ++i){
-		h[i + 1] = 2 * h[i] + 3;
-		p[i + 1] = 2 * p[i] + 1;
+	cin >> s;
+	for(int i = 0; i < 310; ++i){
+		for(int j = 0; j < 310; ++j){
+			dp[i][j] = -1;
+		}
 	}
-	cout << rec(n, x) << endl;
+	cout << rec(0, s.length() - 1) / 3 << endl;
 }
