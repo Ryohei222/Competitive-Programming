@@ -18,7 +18,7 @@
 
 using namespace std;
  
-typedef int64_t i64;
+typedef long long i64;
 typedef pair<i64, i64> P;
 
 template<class T>
@@ -57,8 +57,66 @@ fill_v(T &t,const V &v){
 }
 #pragma endregion
 
+i64 gcd(i64 a, i64 b) {
+  if(a < b) gcd(b, a);
+  i64 r;
+  while ((r=a%b)) {
+    a = b;
+    b = r;
+  }
+  return b;
+}
+
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
-	
+	int n;
+	cin >> n;
+	vector<i64> a(n), b(n);
+	for(int i = 0; i < n; ++i) cin >> a[i];
+	for(int i = 0; i < n; ++i) cin >> b[i];
+	vector<P> ans;
+	int all = 0;
+	for(int i = 0; i < n; ++i){
+		if(a[i] != 0 && b[i] != 0){
+			i64 ta = abs(a[i]);
+			i64 tb = abs(b[i]);
+			a[i] /= gcd(ta, tb);
+			b[i] /= gcd(ta, tb);
+			if(a[i] > 0 && b[i] < 0){
+				a[i] *= -1;
+				b[i] *= -1;
+			}
+			if(a[i] < 0 && b[i] < 0){
+				a[i] *= -1;
+				b[i] *= -1;
+			}
+		}
+		if(a[i] == 0 && b[i] == 0){
+			++all;
+			continue;
+		}
+		if(b[i] == 0){
+			ans.push_back(P(0, 0));
+		}else if(a[i] != 0){
+			ans.push_back(P(a[i], b[i]));
+		}
+	}
+	if(ans.size() == 0){
+		cout << 0 + all << endl;
+		return 0;
+	}
+	sort(ans.begin(), ans.end());
+	P tmp = P(SINF<i64>, SINF<i64>);
+	int c = 0; int res = 1;
+	for(int i = 0; i < ans.size(); ++i){
+		if(tmp == ans[i]){
+			++c;
+		}else{
+			res = max(res, c);
+			tmp = ans[i];
+			c = 1;
+		}
+	}
+	cout << max(res, c) + all << endl;
 }

@@ -18,7 +18,7 @@
 
 using namespace std;
  
-typedef int64_t i64;
+typedef long long i64;
 typedef pair<i64, i64> P;
 
 template<class T>
@@ -60,5 +60,25 @@ fill_v(T &t,const V &v){
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
-	
+	i64 n, m;
+	cin >> n >> m;
+	vector<P> v;
+	for(int i = 0; i < n; ++i){
+		i64 a, b;
+		cin >> a >> b;
+		v.push_back(P(a, b));
+	}
+	sort(v.begin(), v.end());
+	i64 sum = 0, cnt = 0;
+	for(int i = 0; i < n; ++i){
+		if(cnt >= m) break;
+		if(cnt + v[i].second >= m){
+			sum += (m - cnt) * v[i].first;
+			cnt = m;
+		}else{
+			sum += v[i].first * v[i].second;
+			cnt += v[i].second;
+		}
+	}
+	cout << sum << endl;
 }

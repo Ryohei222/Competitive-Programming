@@ -18,7 +18,7 @@
 
 using namespace std;
  
-typedef int64_t i64;
+typedef long long i64;
 typedef pair<i64, i64> P;
 
 template<class T>
@@ -60,5 +60,30 @@ fill_v(T &t,const V &v){
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
-	
+	int n, q;
+	cin >> n;
+	vector<int> b(n);
+	for(int i = 0; i < n; ++i) cin >> b[i];
+	cin >> q;
+	vector<vector<int>> op(n, vector<int>());
+	for(int i = 0; i < q; ++i){
+		int nl, nr;
+		cin >> nl >> nr;
+		--nl; --nr;
+		op[nl].push_back(nr);
+	}
+	vector<int> dp(n + 1, SINF<int>);
+	dp[0] = 0;
+	vector<int> wa(n + 1, 0);
+	for(int i = 0; i < n; ++i) wa[i + 1] = wa[i] + b[i];
+	for(int i = 0; i < n; ++i){
+		if(b[i] == 0) dp[i + 1] = min(dp[i], dp[i + 1]);
+		else dp[i + 1] = min(dp[i] + 1, dp[i + 1]);
+		for(int j = 0; j < op[i].size(); ++j){
+			int r = op[i][j];
+			int cost = r - i + 1 - (wa[r + 1] - wa[i]);
+			dp[r + 1] = min(dp[r + 1], dp[i] + cost);
+		}
+	}
+	cout << dp[n] << endl;
 }

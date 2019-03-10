@@ -18,7 +18,7 @@
 
 using namespace std;
  
-typedef int64_t i64;
+typedef long long i64;
 typedef pair<i64, i64> P;
 
 template<class T>
@@ -60,5 +60,40 @@ fill_v(T &t,const V &v){
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
-	
+	int n, m;
+	cin >> n >> m;
+	vector<vector<edge>> G(n + 1);
+	vector<int> cnt(n + 1, 0);
+	for(int i = 0; i < m; ++i){
+		int a, b;
+		cin >> a >> b;
+		G[a].push_back(edge(a, b, 0));
+		G[b].push_back(edge(b, a, 0));
+		cnt[a]++;
+		cnt[b]++; 
+	}
+	int maxi, idx;
+	maxi = -1; idx = 0;
+	for(int i = 1; i <= n; ++i){
+		if(maxi < cnt[i]){
+			maxi = cnt[i];
+			idx = i;
+		}
+	}
+	vector<bool> used(n + 1, false);
+	used[idx] = true;
+	queue<int> que;
+	que.push(idx);
+	vector<P> ans;
+	while(!que.empty()){
+		int t = que.front(); que.pop();
+		for(int i = 0; i < G[t].size(); ++i){
+			if(!used[G[t][i].to]){
+				ans.push_back(P(t, G[t][i].to));
+				que.push(G[t][i].to);
+				used[G[t][i].to] = true;
+			}
+		}
+	}
+	for(int i = 0; i < ans.size(); ++i) cout << ans[i].first << " " << ans[i].second << endl;
 }

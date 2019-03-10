@@ -18,7 +18,7 @@
 
 using namespace std;
  
-typedef int64_t i64;
+typedef long long i64;
 typedef pair<i64, i64> P;
 
 template<class T>
@@ -58,7 +58,14 @@ fill_v(T &t,const V &v){
 #pragma endregion
 
 int main(){
-	ios_base::sync_with_stdio(false);
-	cin.tie(0);
-	
+	string s, t;
+	cin >> s >> t;
+	int a = stoi(s.substr(0, 2), nullptr, 10);
+	int b = stoi(s.substr(3, 2), nullptr, 10);
+	int c = stoi(t.substr(0, 2), nullptr, 10);
+	int d = stoi(t.substr(3, 2), nullptr, 10);
+	a *= 60; c *= 60;
+	int res = (a + b + c + d) / 2;
+	int h = res / 60;
+	printf("%02d:%02d\n", h, (res - h * 60));
 }
