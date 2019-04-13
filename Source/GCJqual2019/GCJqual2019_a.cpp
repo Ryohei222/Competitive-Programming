@@ -63,5 +63,28 @@ fill_v(T &t,const V &v){
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
-	
+	i64 n;
+	cin >> n;
+	for(i64 k = 0; k < n; ++k){
+		string s;
+		cin >> s;
+		string a, b;
+		a = b = "";
+		bool flag = false;
+		for(i64 i = 0; i < s.length(); ++i){
+			if(s[i] == '4'){
+				a = a + '3';
+				b = b + '1';
+				flag = true;
+			}else{
+				if(flag){
+					a = a + s[i];
+					b = b + '0';
+				}else{
+					a = a + s[i];
+				}
+			}
+		}
+		cout << "Case #" << k + 1 << ": " << a << " " << b << endl;
+	}
 }

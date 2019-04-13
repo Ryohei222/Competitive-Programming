@@ -63,5 +63,11 @@ fill_v(T &t,const V &v){
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
-	
+	i64 n, x;
+	cin >> n >> x;
+	vector<i64> s(n);
+	for(int i = 0; i < n; ++i) cin >> s[i];
+	// 1番小さい数が重要
+	// O(sum k! k=1-n-1)
+	// 22 13 11 6 5
 }

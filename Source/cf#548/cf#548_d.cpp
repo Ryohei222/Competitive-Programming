@@ -38,7 +38,6 @@ struct edge {
 	edge(i64 src, i64 to, i64 cost) : from(src), to(to), cost(cost) {}
 };
 
-// 多重vectorを可変引数テンプレートで http://beet-aizu.hatenablog.com/entry/2018/04/08/145516
 template<typename T>
 vector<T> make_v(size_t a){return vector<T>(a);}
 
@@ -56,12 +55,35 @@ typename enable_if<is_class<T>::value!=0>::type
 fill_v(T &t,const V &v){
 	for(auto &e:t) fill_v(e,v);
 }
-//
-
 #pragma endregion
 
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
-	
+	vector<i64> p(3);
+	i64 k;
+	cin >> p[0] >> p[1] >> p[2] >> k;
+	i64 x = 1;
+	vector<vector<i64>> v(3, vector<i64>(64, 1));
+	for(int i = 0; i < 3; ++i){
+		for(int j = 0; j < 62; ++j){
+			if(SINF<i64> <= v[i][j] || v[i][j] == -1) v[i][j + 1] = -1;
+			else v[i][j + 1] = v[i][j] * p[i];
+		}
+	}
+	vector<i64> ans;
+	for(int i = 0; i < 64; ++i){
+		if(v[0][i] == -1) break;
+		for(int j = 0; j < 64; ++j){
+			if(v[1][j] == -1) break;
+			if(v[0][i] * v[1][j] >= SINF<i64>) break;
+			for(int r = 0; r < 64; ++r){
+				if(v[2][r] == -1) break;
+				if(v[0][i] * v[1][j] * v[2][r] >= SINF<i64>) break;
+				ans.push_back(v[0][i] * v[1][j] * v[2][r]);
+			}
+		}
+	}
+	sort(ans.begin(), ans.end());
+	cout << ans[k - 1] << endl;
 }

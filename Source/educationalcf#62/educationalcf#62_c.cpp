@@ -38,7 +38,6 @@ struct edge {
 	edge(i64 src, i64 to, i64 cost) : from(src), to(to), cost(cost) {}
 };
 
-// 多重vectorを可変引数テンプレートで http://beet-aizu.hatenablog.com/entry/2018/04/08/145516
 template<typename T>
 vector<T> make_v(size_t a){return vector<T>(a);}
 
@@ -56,12 +55,35 @@ typename enable_if<is_class<T>::value!=0>::type
 fill_v(T &t,const V &v){
 	for(auto &e:t) fill_v(e,v);
 }
-//
-
 #pragma endregion
 
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
-	
+	i64 n, k;
+	cin >> n >> k;
+	vector<P> v;
+	for(int i = 0; i < n; ++i){
+		i64 t, b;
+		cin >> t >> b;
+		v.push_back(P(b, t));
+	}
+	sort(v.begin(), v.end(), greater<P>());
+	priority_queue<i64, vector<i64>, greater<i64> > que;
+	i64 ans = 0, sum = 0;
+	for(int i = 0; i < n; ++i){
+		if(i >= k){
+			i64 t = que.top();
+			if(t < v[i].second){
+				que.pop();
+				que.push(v[i].second);
+				sum += v[i].second - t;
+			}
+		}else{
+			que.push(v[i].second);
+			sum += v[i].second;
+		}
+		ans = max(ans, sum * v[i].first);
+	}
+	cout << ans << endl;
 }

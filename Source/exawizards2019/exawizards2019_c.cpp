@@ -63,5 +63,30 @@ fill_v(T &t,const V &v){
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
-	
+	i64 n, q;
+	cin >> n >> q;
+	string s;
+	cin >> s;
+	vector<char> t(q), d(q);
+	for(int i = 0; i < q; ++i) cin >> t[i] >> d[i];
+	int ans = n;
+	int l = 0, r = n - 1, lx = 0, rx = n - 1, lp = -1, rp = -1;
+	for(int i = 0; i < q; ++i){
+		if(s[0] == t[i] && d[i] == 'L'){
+			// <-
+			int tmp = 0;
+			for(int j = i; j >= 0; --j){
+				if(j == lp) break;
+				if(tmp == -1) break;
+				if(s[tmp + 1] == t[j] && d[j] == 'L'){
+					++tmp;
+				}else if(s[tmp] == t[i] && d[j] == 'R'){
+					--tmp;
+				}
+			}
+			if(tmp != -1){
+				ans -= min(0, lx - tmp);
+			}
+		}
+	}
 }

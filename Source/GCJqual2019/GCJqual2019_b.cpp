@@ -63,5 +63,17 @@ fill_v(T &t,const V &v){
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
-	
+	int t;
+	cin >> t;
+	for(int k = 0; k < t; ++k){
+		string s;
+		int n;
+		cin >> n >> s;
+		cout << "Case #" << k + 1 << ": ";
+		for(int i = 0; i < s.length(); ++i){
+			if(s[i] == 'E') cout << 'S';
+			if(s[i] == 'S') cout << 'E';
+		}
+		cout << endl;
+	}
 }
