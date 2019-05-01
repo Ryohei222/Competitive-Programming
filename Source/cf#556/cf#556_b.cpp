@@ -28,7 +28,7 @@ const T SINF = numeric_limits<T>::max() / 10;
 static const i64 MOD = 1000000007;
 
 //int dx[4] = {0,1,0,-1}, dy[4] = {-1,0,1,0};
-//int dx[5] = {-1,0,0,0,1}, dy[5] = {0,-1,0,1,0};
+int dx[5] = {-1,0,0,0,1}, dy[5] = {0,-1,0,1,0};
 //int dx[8] = {-1,0,1,1,1,0,-1,-1}, dy[8] = {1,1,1,0,-1,-1,-1,0};
 //int dx[9] = {-1,0,1,1,1,0,-1,-1,0}, dy[9] = {1,1,1,0,-1,-1,-1,0,0};
 
@@ -38,6 +38,7 @@ struct edge {
 	edge(i64 src, i64 to, i64 cost) : from(src), to(to), cost(cost) {}
 };
 
+// 多重vectorを可変引数テンプレートで http://beet-aizu.hatenablog.com/entry/2018/04/08/145516
 template<typename T>
 vector<T> make_v(size_t a){return vector<T>(a);}
 
@@ -62,8 +63,29 @@ fill_v(T &t,const V &v){
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
-	int a, b;
-	cin >> a >> b;
-	if(a + b >= 10) cout << "error" << endl;
-	else cout << a + b << endl;
+	int n;
+	cin >> n;
+	vector<string> s(n);
+	for(int i = 0; i < n; ++i) cin >> s[i];
+	for(int i = 1; i < n - 1; ++i){
+		for(int j = 1; j < n - 1; ++j){
+			bool flag = true;
+			for(int k = 0; k < 5; ++k){
+				if(s[i+dx[k]][j+dy[k]] == '#') flag = false;
+			}
+			if(flag){
+				for(int k = 0; k < 5; ++k){
+					s[i+dx[k]][j+dy[k]] = '#';
+				}
+			}
+		}
+	}
+	bool flag = true;
+	for(int i = 0; i < n; ++i){
+		for(int j = 0; j < n; ++j){
+			if(s[i][j] == '.') flag = false;
+		}
+	}
+	if(flag) cout << "YES" << endl;
+	else cout << "NO" << endl;
 }

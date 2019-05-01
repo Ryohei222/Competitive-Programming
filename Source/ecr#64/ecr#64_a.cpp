@@ -38,6 +38,7 @@ struct edge {
 	edge(i64 src, i64 to, i64 cost) : from(src), to(to), cost(cost) {}
 };
 
+// 多重vectorを可変引数テンプレートで http://beet-aizu.hatenablog.com/entry/2018/04/08/145516
 template<typename T>
 vector<T> make_v(size_t a){return vector<T>(a);}
 
@@ -62,8 +63,16 @@ fill_v(T &t,const V &v){
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
-	int a, b;
-	cin >> a >> b;
-	if(a + b >= 10) cout << "error" << endl;
-	else cout << a + b << endl;
+	int n, cf, cb;
+	cin >> n >> cf >> cb;
+	string st;
+	cin >> st;
+	vector<int> pat(n);
+	for(int i = 0; i < n; ++i) pat[i] = i;
+	int mi = SINF<int>;
+	vector<int> ans;
+	do{
+		int cost = 0;
+		for(int i = 0; i < )
+	}while(next_permutation(pat.begin(), pat.end()));
 }

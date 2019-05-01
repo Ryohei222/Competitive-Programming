@@ -62,8 +62,7 @@ fill_v(T &t,const V &v){
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
-	int a, b;
-	cin >> a >> b;
-	if(a + b >= 10) cout << "error" << endl;
-	else cout << a + b << endl;
+	string s1, s2, s3;
+	cin >> s1 >> s2 >> s3;
+	cout << s1[0] << s2[1] << s3[3] << endl;
 }

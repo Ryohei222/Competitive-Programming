@@ -38,6 +38,7 @@ struct edge {
 	edge(i64 src, i64 to, i64 cost) : from(src), to(to), cost(cost) {}
 };
 
+// 多重vectorを可変引数テンプレートで http://beet-aizu.hatenablog.com/entry/2018/04/08/145516
 template<typename T>
 vector<T> make_v(size_t a){return vector<T>(a);}
 
@@ -62,8 +63,27 @@ fill_v(T &t,const V &v){
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
-	int a, b;
-	cin >> a >> b;
-	if(a + b >= 10) cout << "error" << endl;
-	else cout << a + b << endl;
+	int h, w;
+	cin >> h >> w;
+	vector<string> s(h);
+	for(int i = 0; i < h; ++i) cin >> s[i];
+	vector<bool> x(w), y(h);
+	for(int i = 0; i < h; ++i){
+		bool flag = true;
+		for(int j = 0; j < w; ++j) if(s[i][j] == '#') flag = false;
+		y[i] = flag;
+	}
+	for(int i = 0; i < w; ++i){
+		bool flag = true;
+		for(int j = 0; j < h; ++j) if(s[j][i] == '#') flag = false;
+		x[i] = flag;
+	}
+	for(int i = 0; i < h; ++i){
+		if(y[i]) continue;
+		for(int j = 0; j < w; ++j){
+			if(x[j]) continue;
+			cout << s[i][h];
+		}
+		cout << endl;
+	}
 }
